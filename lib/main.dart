@@ -5,9 +5,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,62 +14,94 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        appBarTheme: AppBarTheme(
+          color: Colors.lightBlue, // Color for the app bar
+        ),
       ),
       home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  Color appBarColor = Colors.lightBlue; // Default color for the app bar
+  IconData appBarIcon = Icons.message; // Default icon for the app bar
+  String appBarTitle = 'Days Task'; // Default title for the app bar
+  Color bodyColor = Colors.white; // Default color for the body
+  String bodyText = 'Hello, Flutter!'; // Default text for the body
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Hello World!')), body: TextInputWidget());
-  }
-}
-
-class TextInputWidget extends StatefulWidget {
-  const TextInputWidget({super.key});
-
-  @override
-  State<TextInputWidget> createState() => _TextInputWidgetState();
-}
-
-class _TextInputWidgetState extends State<TextInputWidget> {
-  final controller = TextEditingController();
-  String text = "";
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
-
-  void changeText(text) {
-    if (text == "Hello World") {
-      controller.clear();
-      text = "";
-    }
-    setState(() {
-      this.text = text;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      TextField(
-        controller: this.controller,
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.message),
-          labelText: "Type a Message:",
+      appBar: AppBar(
+        title: Text(appBarTitle),
+        leading: IconButton(
+          icon: Icon(appBarIcon),
+          onPressed: () {
+            setState(() {
+              appBarIcon = Icons.menu; // Change icon in app bar
+            });
+          },
         ),
-        onChanged: (text) => changeText(text),
+        backgroundColor: appBarColor,
       ),
-      Text(this.text)
-    ]);
+      body: Container(
+        color: bodyColor, // Set background color of the body
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  appBarColor = Colors.orange; // Change color of app bar
+                });
+              },
+              child: Text('Change App Bar Color'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  appBarIcon = Icons.send; // Change icon in app bar
+                });
+              },
+              child: Text('Change Icon in App Bar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  appBarTitle = 'New Title'; // Change title in app bar
+                });
+              },
+              child: Text('Change Title in App Bar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  bodyColor = Colors.blue; // Change color of the body
+                });
+              },
+              child: Text('Change Body Color'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  bodyText = 'Changed Text'; // Change text in the body
+                });
+              },
+              child: Text('Change Text in Body'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
